@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Calcolatore bollo auto: quanto paghi e se sei esente dal 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+/*__CSS__*/
+</style>
+</head>
+<body>
+<div id="app" class="app">
+  <div class="layout">
+    <form id="form" class="form" novalidate autocomplete="off">
+      <h2 class="titolo">La tua auto</h2>
+
+      <div class="campo">
+        <label for="regione">Regione o Provincia autonoma di residenza</label>
+        <select id="regione" name="regione">
+          <option value="" disabled selected>Scegli la Regione</option>
+        </select>
+      </div>
+
+      <svg id="mappa" class="mappa" viewBox="0 0 __MAPPA_L__ __MAPPA_A__" aria-hidden="true" focusable="false">
+        <g id="mappa-regioni">__MAPPA_REGIONI__</g>
+        <path class="conf" d="__MAPPA_CONFINI__"/>
+      </svg>
+
+      <div class="campo">
+        <label for="kw">Potenza in kW</label>
+        <input id="kw" name="kw" type="number" inputmode="numeric" min="1" max="999" step="1" placeholder="Per esempio 70" aria-describedby="kw-aiuto kw-errore">
+        <p id="kw-aiuto" class="aiuto">La trovi alla voce P.2 della carta di circolazione. Se il libretto riporta solo i cavalli (CV), dividi per 1,36</p>
+        <p id="kw-errore" class="errore" hidden></p>
+      </div>
+
+      <div class="campo" id="anno-campo" hidden>
+        <label for="anno">Anno di immatricolazione (facoltativo)</label>
+        <input id="anno" name="anno" type="number" inputmode="numeric" min="1900" step="1" placeholder="Per esempio 2019" aria-describedby="anno-aiuto anno-errore">
+        <p id="anno-aiuto" class="aiuto">Serve per il superbollo, che si riduce con l'età dell'auto. Senza anno mostriamo l'importo pieno</p>
+        <p id="anno-errore" class="errore" hidden></p>
+      </div>
+
+      <div class="campo">
+        <label for="classe">Classe ambientale</label>
+        <select id="classe" name="classe">
+          <option value="" disabled selected>Scegli la classe</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="alimentazione">Alimentazione</label>
+        <select id="alimentazione" name="alimentazione"></select>
+      </div>
+
+      <fieldset class="campo">
+        <legend>Intestatario</legend>
+        <div class="scelte">
+          <label class="scelta"><input type="radio" name="intestatario" value="persona" checked> Persona fisica</label>
+          <label class="scelta"><input type="radio" name="intestatario" value="societa"> Società o ente</label>
+        </div>
+      </fieldset>
+
+      <div class="campo">
+        <label class="scelta scelta--casella" for="unica"><input id="unica" name="unica" type="checkbox" checked> <span>È l'unica auto fino a 80 kW intestata a me (o la meno potente tra quelle che ho)</span></label>
+      </div>
+    </form>
+
+    <section id="risultato" aria-live="polite" aria-atomic="false" aria-label="Risultato"></section>
+  </div>
+
+  <footer class="nota">
+    <p>Calcolo indicativo per autovetture a uso privato con pagamento annuale. Le tariffe sono quelle 2026 pubblicate da ACI e dalle Regioni; per Calabria, Liguria, Marche e Veneto vanno verificate sul sito della Regione. Non sono considerate le esenzioni e riduzioni regionali per GPL, metano, ibride, auto storiche e disabili. L'esenzione 2027 è quella prevista dall'articolo 3 del disegno di legge di bilancio 2027 e può cambiare durante l'esame parlamentare. Fonti: ACI, tariffari regionali 2026; A.C. 3174, legge di bilancio 2027.</p>
+  </footer>
+</div>
+
+<script type="application/json" id="dati">__DATI__</script>
+<script>
+/*__CALCOLO__*/
+</script>
+<script>
+/*__APP__*/
+</script>
+</body>
+</html>

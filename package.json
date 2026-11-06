@@ -1,0 +1,10 @@
+{
+  "name": "calcolatore-bollo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Calcolatore del bollo auto 2026 e dell'esenzione 2027 (art. 3, A.C. 3174) per l'articolo Radar",
+  "scripts": {
+    "test": "node --test",
+    "build": "node build.js"
+  }
+}

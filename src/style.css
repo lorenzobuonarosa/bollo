@@ -1,0 +1,445 @@
+:root {
+  --testo: #0b0b0b;
+  --testo-2: #52514e;
+  --linea: #e1e0d9;
+  --sfondo: #fcfcfb;
+  --bordo-campo: #86857f;
+  --verde: #1baf7a;
+  --arancio: #eb6834;
+  --blu: #2a78d6;
+  --mappa: #e1e0d9;
+  --mappa-hover: #cfcec6;
+  --avviso-sfondo: #f4f3ee;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --testo: #f3f2ee;
+    --testo-2: #a8a7a1;
+    --linea: #34332f;
+    --sfondo: #141413;
+    --bordo-campo: #7b7a74;
+    --mappa: #2b2a27;
+    --mappa-hover: #3d3c38;
+    --avviso-sfondo: #1e1d1b;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --testo: #f3f2ee;
+  --testo-2: #a8a7a1;
+  --linea: #34332f;
+  --sfondo: #141413;
+  --bordo-campo: #7b7a74;
+  --mappa: #2b2a27;
+  --mappa-hover: #3d3c38;
+  --avviso-sfondo: #1e1d1b;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--sfondo);
+  color: var(--testo);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.app {
+  padding: 16px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+}
+
+@media (min-width: 601px) {
+  .layout {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: start;
+    gap: 32px;
+  }
+}
+
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+.titolo {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--testo-2);
+  margin-bottom: 12px;
+}
+
+/* ---------------------------------------------------------------- form */
+
+.campo {
+  margin-bottom: 16px;
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.campo > label:not(.scelta),
+.campo legend {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  padding: 0;
+}
+
+.aiuto,
+.piccolo {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--testo-2);
+}
+
+.aiuto {
+  margin-top: 4px;
+}
+
+select,
+input[type="number"] {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  font: inherit;
+  color: var(--testo);
+  background: var(--sfondo);
+  border: 1px solid var(--bordo-campo);
+  border-radius: 8px;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 36px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1.5l5 5 5-5' fill='none' stroke='%2386857f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[aria-invalid="true"] {
+  border-color: var(--arancio);
+  box-shadow: 0 0 0 1px var(--arancio);
+}
+
+:focus-visible {
+  outline: 2px solid var(--blu);
+  outline-offset: 2px;
+}
+
+.errore {
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.errore::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--arancio);
+}
+
+.scelte {
+  display: grid;
+  gap: 8px;
+}
+
+.scelta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--bordo-campo);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0;
+}
+
+.scelta input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  flex: none;
+  accent-color: var(--blu);
+}
+
+.scelta:has(input:checked) {
+  border-color: var(--testo);
+}
+
+.scelta:has(input:focus-visible) {
+  outline: 2px solid var(--blu);
+  outline-offset: 2px;
+}
+
+.scelta--casella {
+  align-items: flex-start;
+}
+.scelta--casella input {
+  margin-top: 3px;
+}
+
+/* ---------------------------------------------------------------- mappa */
+
+.mappa {
+  display: block;
+  margin: 0 auto 16px;
+  height: 200px;
+  width: auto;
+  max-width: 100%;
+}
+
+@media (min-width: 601px) {
+  .mappa {
+    height: 260px;
+  }
+}
+
+.mappa .reg {
+  fill: var(--mappa);
+  stroke: var(--mappa);
+  stroke-width: 0.5;
+  stroke-linejoin: round;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .mappa .reg:hover {
+    fill: var(--mappa-hover);
+    stroke: var(--mappa-hover);
+  }
+}
+
+.mappa .reg.sel {
+  fill: var(--testo-2);
+  stroke: var(--testo-2);
+}
+.mappa .reg.sel--si {
+  fill: var(--verde);
+  stroke: var(--verde);
+}
+.mappa .reg.sel--no {
+  fill: var(--arancio);
+  stroke: var(--arancio);
+}
+
+.mappa .conf {
+  fill: none;
+  stroke: var(--sfondo);
+  stroke-width: 1.1;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------- risultato */
+
+.vuoto {
+  padding: 16px;
+  border: 1px dashed var(--bordo-campo);
+  border-radius: 12px;
+  color: var(--testo-2);
+}
+
+.blocco {
+  padding: 16px 0 20px;
+  border-top: 1px solid var(--linea);
+}
+
+.blocco:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.importo {
+  font-size: 36px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.importo small {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--testo-2);
+  letter-spacing: 0;
+}
+
+.dettaglio {
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+  color: var(--testo-2);
+  overflow-wrap: anywhere;
+}
+
+.riga {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--linea);
+}
+
+.riga__titolo {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.riga__titolo--totale {
+  font-size: 18px;
+}
+
+.avviso {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--avviso-sfondo);
+  border: 1px solid var(--linea);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.fonte {
+  margin-top: 10px;
+}
+
+.esito {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 20px;
+  line-height: 1.3;
+  font-weight: 700;
+  padding-left: 12px;
+  border-left: 4px solid var(--testo-2);
+}
+
+.esito--si {
+  border-left-color: var(--verde);
+}
+.esito--no {
+  border-left-color: var(--arancio);
+}
+
+.motivo {
+  margin-top: 8px;
+}
+
+.nota-regione {
+  margin-top: 8px;
+}
+
+.valore {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.barre {
+  margin-top: 14px;
+  display: grid;
+  gap: 14px;
+}
+
+.barra__testa {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  column-gap: 12px;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.barra__testa strong {
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+.barra__pista {
+  height: 14px;
+  border-radius: 7px;
+  background: var(--linea);
+  overflow: hidden;
+}
+
+.barra__riempimento {
+  height: 100%;
+  border-radius: 7px;
+  min-width: 6px;
+}
+
+.barra--risparmio {
+  background: var(--verde);
+}
+.barra--compensazione {
+  background: var(--blu);
+}
+
+.confronto {
+  margin-top: 14px;
+}
+
+/* ---------------------------------------------------------------- nota fissa */
+
+.nota {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--linea);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--testo-2);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .barra__riempimento {
+    transition: width 0.25s ease;
+  }
+}

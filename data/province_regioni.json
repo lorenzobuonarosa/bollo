@@ -1,0 +1,26 @@
+{
+  "fonte": "Sigle delle province del file confini_province_flourish.csv; SAR è la Sardegna come poligono unico",
+  "regioni": {
+    "abruzzo": ["AQ", "CH", "PE", "TE"],
+    "basilicata": ["MT", "PZ"],
+    "calabria": ["CS", "CZ", "KR", "RC", "VV"],
+    "campania": ["AV", "BN", "CE", "NA", "SA"],
+    "emilia-romagna": ["BO", "FC", "FE", "MO", "PC", "PR", "RA", "RE", "RN"],
+    "friuli-venezia-giulia": ["GO", "PN", "TS", "UD"],
+    "lazio": ["FR", "LT", "RI", "RM", "VT"],
+    "liguria": ["GE", "IM", "SP", "SV"],
+    "lombardia": ["BG", "BS", "CO", "CR", "LC", "LO", "MB", "MI", "MN", "PV", "SO", "VA"],
+    "marche": ["AN", "AP", "FM", "MC", "PU"],
+    "molise": ["CB", "IS"],
+    "pa-bolzano": ["BZ"],
+    "pa-trento": ["TN"],
+    "piemonte": ["AL", "AT", "BI", "CN", "NO", "TO", "VB", "VC"],
+    "puglia": ["BA", "BR", "BT", "FG", "LE", "TA"],
+    "sardegna": ["SAR"],
+    "sicilia": ["AG", "CL", "CT", "EN", "ME", "PA", "RG", "SR", "TP"],
+    "toscana": ["AR", "FI", "GR", "LI", "LU", "MS", "PI", "PO", "PT", "SI"],
+    "umbria": ["PG", "TR"],
+    "valle-d-aosta": ["AO"],
+    "veneto": ["BL", "PD", "RO", "TV", "VE", "VI", "VR"]
+  }
+}
