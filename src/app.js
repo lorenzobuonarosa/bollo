@@ -20,7 +20,6 @@
     anno: $('anno'),
     annoErrore: $('anno-errore'),
     risultato: $('risultato'),
-    mappa: $('mappa-regioni'),
   };
 
   function esc(s) {
@@ -193,27 +192,6 @@
     return h + '</article>';
   }
 
-  // ------------------------------------------------------------ mappa
-
-  var percorsi = Array.prototype.slice.call(el.mappa.querySelectorAll('.reg'));
-
-  function coloraMappa(regioneId, esente) {
-    var classe = esente === true ? 'sel--si' : esente === false ? 'sel--no' : '';
-    percorsi.forEach(function (p) {
-      var attiva = p.getAttribute('data-regione') === regioneId;
-      p.classList.toggle('sel', attiva);
-      p.classList.toggle('sel--si', attiva && classe === 'sel--si');
-      p.classList.toggle('sel--no', attiva && classe === 'sel--no');
-    });
-  }
-
-  el.mappa.addEventListener('click', function (ev) {
-    var p = ev.target.closest ? ev.target.closest('.reg') : null;
-    if (!p) return;
-    el.regione.value = p.getAttribute('data-regione');
-    aggiorna();
-  });
-
   // ------------------------------------------------------------ aggiornamento
 
   function mostraErrore(campo, errore, messaggio) {
@@ -236,12 +214,10 @@
     if (!s.classe) mancano.push('la classe ambientale');
 
     if (s.kw.stato === 'errore') {
-      coloraMappa(s.regione, null);
       el.risultato.innerHTML = '<p class="vuoto">' + esc(s.kw.messaggio) + ' per vedere il risultato.</p>';
       return;
     }
     if (mancano.length) {
-      coloraMappa(s.regione, null);
       var elenco = mancano.length > 1 ? mancano.slice(0, -1).join(', ') + ' e ' + mancano[mancano.length - 1] : mancano[0];
       el.risultato.innerHTML = '<p class="vuoto">Per vedere il risultato scegli ' + esc(elenco) + '.</p>';
       return;
@@ -257,7 +233,6 @@
       annoImmatricolazione: s.anno.stato === 'ok' ? s.anno.valore : null,
     });
 
-    coloraMappa(s.regione, r.esenzione.esente);
     el.risultato.innerHTML = htmlBollo(r) + htmlEsenzione(r) + htmlValore(r);
   }
 

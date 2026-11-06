@@ -7,8 +7,6 @@
   --verde: #1baf7a;
   --arancio: #eb6834;
   --blu: #2a78d6;
-  --mappa: #e1e0d9;
-  --mappa-hover: #cfcec6;
   --avviso-sfondo: #f4f3ee;
   color-scheme: light;
 }
@@ -20,9 +18,7 @@
     --linea: #34332f;
     --sfondo: #141413;
     --bordo-campo: #7b7a74;
-    --mappa: #2b2a27;
-    --mappa-hover: #3d3c38;
-    --avviso-sfondo: #1e1d1b;
+        --avviso-sfondo: #1e1d1b;
     color-scheme: dark;
   }
 }
@@ -33,8 +29,6 @@
   --linea: #34332f;
   --sfondo: #141413;
   --bordo-campo: #7b7a74;
-  --mappa: #2b2a27;
-  --mappa-hover: #3d3c38;
   --avviso-sfondo: #1e1d1b;
   color-scheme: dark;
 }
@@ -94,7 +88,7 @@ p {
 /* ---------------------------------------------------------------- form */
 
 .campo {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   border: 0;
   padding: 0;
   min-width: 0;
@@ -179,6 +173,7 @@ input[aria-invalid="true"] {
 
 .scelte {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
 }
 
@@ -187,11 +182,12 @@ input[aria-invalid="true"] {
   align-items: center;
   gap: 10px;
   min-height: 44px;
-  padding: 8px 12px;
+  padding: 8px 10px;
   border: 1px solid var(--bordo-campo);
   border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 15px;
+  line-height: 1.25;
   font-weight: 400;
   margin: 0;
 }
@@ -220,59 +216,6 @@ input[aria-invalid="true"] {
   margin-top: 3px;
 }
 
-/* ---------------------------------------------------------------- mappa */
-
-.mappa {
-  display: block;
-  margin: 0 auto 16px;
-  height: 200px;
-  width: auto;
-  max-width: 100%;
-}
-
-@media (min-width: 601px) {
-  .mappa {
-    height: 260px;
-  }
-}
-
-.mappa .reg {
-  fill: var(--mappa);
-  stroke: var(--mappa);
-  stroke-width: 0.5;
-  stroke-linejoin: round;
-  cursor: pointer;
-}
-
-@media (hover: hover) {
-  .mappa .reg:hover {
-    fill: var(--mappa-hover);
-    stroke: var(--mappa-hover);
-  }
-}
-
-.mappa .reg.sel {
-  fill: var(--testo-2);
-  stroke: var(--testo-2);
-}
-.mappa .reg.sel--si {
-  fill: var(--verde);
-  stroke: var(--verde);
-}
-.mappa .reg.sel--no {
-  fill: var(--arancio);
-  stroke: var(--arancio);
-}
-
-.mappa .conf {
-  fill: none;
-  stroke: var(--sfondo);
-  stroke-width: 1.1;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-  pointer-events: none;
-}
-
 /* ---------------------------------------------------------------- risultato */
 
 .vuoto {
@@ -283,7 +226,7 @@ input[aria-invalid="true"] {
 }
 
 .blocco {
-  padding: 16px 0 20px;
+  padding: 14px 0 16px;
   border-top: 1px solid var(--linea);
 }
 
@@ -293,7 +236,7 @@ input[aria-invalid="true"] {
 }
 
 .importo {
-  font-size: 36px;
+  font-size: 32px;
   line-height: 1.1;
   font-weight: 700;
   letter-spacing: -0.01em;
