@@ -37,3 +37,17 @@ test('Build: i dati incorporati sono quelli del JSON', () => {
   const m = html.match(/<script type="application\/json" id="dati">([\s\S]*?)<\/script>/);
   assert.deepEqual(JSON.parse(m[1]), require('../data/tariffe_2026.json'));
 });
+
+test("Altezza: --altezza nel CSS e height dell'iframe nel README coincidono", () => {
+  const css = fs.readFileSync(path.join(radice, 'src/style.css'), 'utf8');
+  const readme = fs.readFileSync(path.join(radice, 'README.md'), 'utf8');
+  const nelCss = css.match(/--altezza:\s*(\d+)px/)[1];
+  const nelReadme = readme.match(/<iframe[^>]*\bheight="(\d+)"/)[1];
+  assert.equal(nelCss, nelReadme);
+});
+
+test('Schede: due ruoli tab, riepilogo e pannelli presenti', () => {
+  assert.equal((html.match(/role="tab"/g) || []).length, 2);
+  assert.ok(html.includes('id="riepilogo"'));
+  assert.ok(html.includes('data-vista="dati"'));
+});

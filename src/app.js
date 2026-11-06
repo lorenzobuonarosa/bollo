@@ -20,7 +20,22 @@
     anno: $('anno'),
     annoErrore: $('anno-errore'),
     risultato: $('risultato'),
+    form: $('form'),
+    schede: $('schede'),
+    schedaDati: $('scheda-dati'),
+    schedaRisultato: $('scheda-risultato'),
+    punto: $('punto'),
+    riepilogo: $('riepilogo'),
   };
+
+  // Riscrive il contenuto solo se è cambiato: così un pulsante non sparisce tra pressione e
+  // rilascio del tocco (succedeva quando il campo perde il focus) e lo screen reader non
+  // rilegge lo stesso risultato.
+  function imposta(nodo, html) {
+    if (nodo.getAttribute('data-html') === html) return;
+    nodo.innerHTML = html;
+    nodo.setAttribute('data-html', html);
+  }
 
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
@@ -192,6 +207,73 @@
     return h + '</article>';
   }
 
+  // ------------------------------------------------------------ schede (solo mobile)
+
+  var desktop = window.matchMedia('(min-width: 720px)');
+
+  function vai(vista, sposta) {
+    el.app.setAttribute('data-vista', vista);
+    var inDati = vista === 'dati';
+    el.schedaDati.setAttribute('aria-selected', String(inDati));
+    el.schedaRisultato.setAttribute('aria-selected', String(!inDati));
+    el.schedaDati.tabIndex = inDati ? 0 : -1;
+    el.schedaRisultato.tabIndex = inDati ? -1 : 0;
+    if (sposta) (inDati ? el.schedaDati : el.schedaRisultato).focus();
+    el.app.scrollTop = 0;
+  }
+
+  // Su desktop non ci sono schede: i due pannelli restano visibili e perdono i ruoli "tab".
+  function applicaModalita() {
+    var mobile = !desktop.matches;
+    el.schede.hidden = !mobile;
+    if (mobile) {
+      el.form.setAttribute('role', 'tabpanel');
+      el.form.setAttribute('aria-labelledby', 'scheda-dati');
+      el.risultato.setAttribute('role', 'tabpanel');
+      el.risultato.setAttribute('aria-labelledby', 'scheda-risultato');
+    } else {
+      ['role', 'aria-labelledby'].forEach(function (a) {
+        el.form.removeAttribute(a);
+        el.risultato.removeAttribute(a);
+      });
+      vai('dati', false);
+    }
+  }
+  if (desktop.addEventListener) desktop.addEventListener('change', applicaModalita);
+  else desktop.addListener(applicaModalita);
+
+  el.schedaDati.addEventListener('click', function () { vai('dati', false); });
+  el.schedaRisultato.addEventListener('click', function () { vai('risultato', false); });
+  el.schede.addEventListener('keydown', function (ev) {
+    var k = ev.key;
+    if (k === 'ArrowLeft' || k === 'Home') { ev.preventDefault(); vai('dati', true); }
+    if (k === 'ArrowRight' || k === 'End') { ev.preventDefault(); vai('risultato', true); }
+  });
+  el.riepilogo.addEventListener('click', function (ev) {
+    if (ev.target.closest && ev.target.closest('button')) vai('risultato', true);
+  });
+
+  function htmlRiepilogo(r) {
+    if (!r) return '<p class="riepilogo__testo">Compila i campi per vedere il risultato.</p>';
+    var b = r.bollo;
+    var h = '<p class="riepilogo__testo">';
+    if (b.calcolato) {
+      h += '<span class="riepilogo__etichetta">Bollo 2026' + (r.superbollo && r.superbollo.dovuto ? ' con superbollo' : '') + '</span>';
+      h += '<strong>' + esc(C.formatEuro(r.totaleCent)) + '</strong>';
+    } else {
+      h += '<span class="riepilogo__etichetta">Bollo 2026</span><strong>Verifica nella tua Regione</strong>';
+    }
+    h += '<span class="riepilogo__esito riepilogo__esito--' + (r.esenzione.esente ? 'si' : 'no') + '">' +
+      (r.esenzione.esente ? 'Esente dal 2027' : 'Non esente dal 2027') + '</span></p>';
+    h += '<button type="button" class="riepilogo__azione">Dettaglio</button>';
+    return h;
+  }
+
+  function mostraRisultato(r) {
+    imposta(el.riepilogo, htmlRiepilogo(r));
+    el.punto.className = 'punto' + (r ? (r.esenzione.esente ? ' punto--si' : ' punto--no') : '');
+  }
+
   // ------------------------------------------------------------ aggiornamento
 
   function mostraErrore(campo, errore, messaggio) {
@@ -214,12 +296,14 @@
     if (!s.classe) mancano.push('la classe ambientale');
 
     if (s.kw.stato === 'errore') {
-      el.risultato.innerHTML = '<p class="vuoto">' + esc(s.kw.messaggio) + ' per vedere il risultato.</p>';
+      imposta(el.risultato, '<p class="vuoto">' + esc(s.kw.messaggio) + ' per vedere il risultato.</p>');
+      mostraRisultato(null);
       return;
     }
     if (mancano.length) {
       var elenco = mancano.length > 1 ? mancano.slice(0, -1).join(', ') + ' e ' + mancano[mancano.length - 1] : mancano[0];
-      el.risultato.innerHTML = '<p class="vuoto">Per vedere il risultato scegli ' + esc(elenco) + '.</p>';
+      imposta(el.risultato, '<p class="vuoto">Per vedere il risultato scegli ' + esc(elenco) + '.</p>');
+      mostraRisultato(null);
       return;
     }
 
@@ -233,7 +317,8 @@
       annoImmatricolazione: s.anno.stato === 'ok' ? s.anno.valore : null,
     });
 
-    el.risultato.innerHTML = htmlBollo(r) + htmlEsenzione(r) + htmlValore(r);
+    imposta(el.risultato, htmlBollo(r) + htmlEsenzione(r) + htmlValore(r));
+    mostraRisultato(r);
   }
 
   el.regione.form.addEventListener('input', aggiorna);
@@ -259,6 +344,7 @@
   window.addEventListener('load', function () { inviaAltezza(true); });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { inviaAltezza(); });
 
+  applicaModalita();
   aggiorna();
   inviaAltezza(true);
 })();

@@ -19,6 +19,7 @@
   --arancio: #eb6834;
   --blu: #2a78d6;
   --avviso-sfondo: #f4f3ee;
+  --altezza: 1000px; /* altezza dell'iframe: sempre la stessa, su mobile e desktop */
   color-scheme: light;
 }
 
@@ -62,6 +63,8 @@ body {
 }
 
 .app {
+  height: var(--altezza);
+  overflow-y: auto;
   padding: 16px;
   max-width: 960px;
   margin: 0 auto;
@@ -70,14 +73,44 @@ body {
 .layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 24px;
+  gap: 20px;
 }
 
-@media (min-width: 601px) {
+/* ---- mobile: una scheda alla volta, così l'altezza non cambia mai ---- */
+@media (max-width: 719px) {
+  .app[data-vista="dati"] #risultato,
+  .app[data-vista="dati"] .nota,
+  .app[data-vista="risultato"] #form {
+    display: none;
+  }
+  .form .titolo {
+    display: none;
+  }
+  .app .schede {
+    display: grid;
+  }
+  .app .riepilogo {
+    display: flex;
+  }
+}
+
+/* ---- desktop: due colonne, nota sotto ---- */
+@media (min-width: 720px) {
   .layout {
     grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    grid-template-areas: "form risultato" "nota nota";
+    column-gap: 32px;
+    row-gap: 8px;
     align-items: start;
-    gap: 32px;
+  }
+  #form {
+    grid-area: form;
+  }
+  #risultato {
+    grid-area: risultato;
+  }
+  .nota {
+    grid-area: nota;
   }
 }
 
@@ -237,7 +270,7 @@ input[aria-invalid="true"] {
 }
 
 .blocco {
-  padding: 14px 0 16px;
+  padding: 10px 0 12px;
   border-top: 1px solid var(--linea);
 }
 
@@ -247,7 +280,7 @@ input[aria-invalid="true"] {
 }
 
 .importo {
-  font-size: 32px;
+  font-size: 28px;
   line-height: 1.1;
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -269,8 +302,8 @@ input[aria-invalid="true"] {
 }
 
 .riga {
-  margin-top: 14px;
-  padding-top: 12px;
+  margin-top: 10px;
+  padding-top: 8px;
   border-top: 1px solid var(--linea);
 }
 
@@ -287,8 +320,8 @@ input[aria-invalid="true"] {
 }
 
 .avviso {
-  margin-top: 12px;
-  padding: 10px 12px;
+  margin-top: 8px;
+  padding: 8px 10px;
   border-radius: 8px;
   background: var(--avviso-sfondo);
   border: 1px solid var(--linea);
@@ -304,7 +337,7 @@ input[aria-invalid="true"] {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1.3;
   font-weight: 700;
   padding-left: 12px;
@@ -327,15 +360,15 @@ input[aria-invalid="true"] {
 }
 
 .valore {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   line-height: 1.3;
 }
 
 .barre {
-  margin-top: 14px;
+  margin-top: 10px;
   display: grid;
-  gap: 14px;
+  gap: 10px;
 }
 
 .barra__testa {
@@ -374,17 +407,17 @@ input[aria-invalid="true"] {
 }
 
 .confronto {
-  margin-top: 14px;
+  margin-top: 10px;
 }
 
 /* ---------------------------------------------------------------- nota fissa */
 
 .nota {
-  margin-top: 24px;
-  padding-top: 16px;
+  margin-top: 4px;
+  padding-top: 12px;
   border-top: 1px solid var(--linea);
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: 12px;
+  line-height: 1.45;
   color: var(--testo-2);
 }
 
@@ -398,10 +431,129 @@ input[aria-invalid="true"] {
   }
 }
 
+/* ---------------------------------------------------------------- schede (mobile) */
+
+.schede {
+  display: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--linea);
+}
+
+.scheda {
+  position: relative;
+  min-height: 44px;
+  padding: 8px 12px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--testo-2);
+  background: none;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+}
+
+.scheda[aria-selected="true"] {
+  color: var(--testo);
+  font-weight: 700;
+  border-bottom-color: var(--testo);
+}
+
+.punto {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-left: 4px;
+  border-radius: 50%;
+  background: transparent;
+  vertical-align: 1px;
+}
+.punto--si {
+  background: var(--verde);
+}
+.punto--no {
+  background: var(--arancio);
+}
+
+/* ---------------------------------------------------------------- riepilogo (mobile) */
+
+.riepilogo {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+  padding: 12px;
+  border: 1px solid var(--linea);
+  border-radius: 12px;
+  background: var(--avviso-sfondo);
+  min-height: 72px;
+}
+
+.riepilogo__testo {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.riepilogo__etichetta {
+  color: var(--testo-2);
+}
+
+.riepilogo__testo strong {
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+}
+
+.riepilogo__esito {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.riepilogo__esito::before {
+  content: "";
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--testo-2);
+}
+.riepilogo__esito--si::before {
+  background: var(--verde);
+}
+.riepilogo__esito--no::before {
+  background: var(--arancio);
+}
+
+.riepilogo__azione {
+  flex: none;
+  min-height: 44px;
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--sfondo);
+  background: var(--testo);
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
 </style>
 </head>
 <body>
-<div id="app" class="app">
+<div id="app" class="app" data-vista="dati">
+  <div id="schede" class="schede" role="tablist" aria-label="Sezioni del calcolatore">
+    <button type="button" role="tab" id="scheda-dati" class="scheda" aria-controls="form" aria-selected="true">La tua auto</button>
+    <button type="button" role="tab" id="scheda-risultato" class="scheda" aria-controls="risultato" aria-selected="false" tabindex="-1">Risultato <span id="punto" class="punto" aria-hidden="true"></span></button>
+  </div>
+
   <div class="layout">
     <form id="form" class="form" novalidate autocomplete="off">
       <h2 class="titolo">La tua auto</h2>
@@ -450,14 +602,16 @@ input[aria-invalid="true"] {
       <div class="campo">
         <label class="scelta scelta--casella" for="unica"><input id="unica" name="unica" type="checkbox" checked> <span>È l'unica auto fino a 80 kW intestata a me (o la meno potente tra quelle che ho)</span></label>
       </div>
+
+      <div id="riepilogo" class="riepilogo" aria-live="polite" aria-atomic="true"></div>
     </form>
 
-    <section id="risultato" aria-live="polite" aria-atomic="false" aria-label="Risultato"></section>
-  </div>
+    <section id="risultato" class="risultato" aria-live="polite" aria-atomic="false" aria-label="Risultato"></section>
 
-  <footer class="nota">
-    <p>Calcolo indicativo per autovetture a uso privato con pagamento annuale. Le tariffe sono quelle 2026 pubblicate da ACI e dalle Regioni; per Calabria, Liguria, Marche e Veneto vanno verificate sul sito della Regione. Non sono considerate le esenzioni e riduzioni regionali per GPL, metano, ibride, auto storiche e disabili. L'esenzione 2027 è quella prevista dall'articolo 3 del disegno di legge di bilancio 2027 e può cambiare durante l'esame parlamentare. Fonti: ACI, tariffari regionali 2026; A.C. 3174, legge di bilancio 2027.</p>
-  </footer>
+    <footer class="nota">
+      <p>Calcolo indicativo per autovetture a uso privato con pagamento annuale. Le tariffe sono quelle 2026 pubblicate da ACI e dalle Regioni; per Calabria, Liguria, Marche e Veneto vanno verificate sul sito della Regione. Non sono considerate le esenzioni e riduzioni regionali per GPL, metano, ibride, auto storiche e disabili. L'esenzione 2027 è quella prevista dall'articolo 3 del disegno di legge di bilancio 2027 e può cambiare durante l'esame parlamentare. Fonti: ACI, tariffari regionali 2026; A.C. 3174, legge di bilancio 2027.</p>
+    </footer>
+  </div>
 </div>
 
 <script type="application/json" id="dati">{"anno_tariffe":2026,"anno_esenzione":2027,"classi":[{"id":"E0","nome":"Euro 0"},{"id":"E1","nome":"Euro 1"},{"id":"E2","nome":"Euro 2"},{"id":"E3","nome":"Euro 3"},{"id":"E4","nome":"Euro 4"},{"id":"E5","nome":"Euro 5"},{"id":"E6","nome":"Euro 6"}],"alimentazioni":[{"id":"benzina","nome":"Benzina"},{"id":"gasolio","nome":"Gasolio"},{"id":"ibrida","nome":"Ibrida (benzina o gasolio)","avviso":"Alcune Regioni riducono il bollo per le ibride nei primi anni"},{"id":"gpl_metano","nome":"GPL o metano","avviso":"Molte Regioni prevedono esenzioni o riduzioni per GPL e metano: l'importo può essere più basso"},{"id":"elettrica","nome":"Elettrica","avviso":"Le auto elettriche sono esenti o hanno forti riduzioni in quasi tutte le Regioni: verifica le regole della tua Regione","calcola_importo":false}],"superbollo":{"soglia_kw":185,"euro_per_kw":20,"riduzioni":[{"da_anni":0,"quota":1},{"da_anni":5,"quota":0.6},{"da_anni":10,"quota":0.3},{"da_anni":15,"quota":0.15},{"da_anni":20,"quota":0}],"fonte":"Tributo erariale, uguale in tutta Italia"},"esenzione":{"soglia_kw":80,"alimentazioni_ammesse":["benzina","gasolio","ibrida"],"fonte":"Art. 3 del disegno di legge di bilancio 2027, A.C. 3174","stato":"da verificare","note_regionali":{"friuli-venezia-giulia":"In Friuli Venezia Giulia e Sardegna il bollo è un tributo statale: l'esenzione vale anche lì","sardegna":"In Friuli Venezia Giulia e Sardegna il bollo è un tributo statale: l'esenzione vale anche lì","pa-trento":"L'esenzione si applica previo accordo tra lo Stato e la Provincia autonoma","pa-bolzano":"L'esenzione si applica previo accordo tra lo Stato e la Provincia autonoma"}},"compensazione":{"milioni_euro":2293.5,"milioni_beneficiari":24.6,"fonte":"Art. 3 del disegno di legge di bilancio 2027, A.C. 3174"},"regioni":[{"id":"abruzzo","nome":"Abruzzo","modello":"lineare","fonte":"ACI 2026","stato":"ufficiale","tariffe":{"E0":{"fino100":3.63,"oltre100":5.45},"E1":{"fino100":3.51,"oltre100":5.27},"E2":{"fino100":3.39,"oltre100":5.08},"E3":{"fino100":3.27,"oltre100":4.91},"E4":{"fino100":3.12,"oltre100":4.69},"E5":{"fino100":3.12,"oltre100":4.69},"E6":{"fino100":3.12,"oltre100":4.69}}},{"id":"basilicata","nome":"Basilicata","modello":"lineare","fonte":"ACI 2026","stato":"ufficiale","tariffe":{"E0":{"fino100":3,"oltre100":4.5},"E1":{"fino100":2.9,"oltre100":4.35},"E2":{"fino100":2.8,"oltre100":4.2},"E3":{"fino100":2.7,"oltre100":4.05},"E4":{"fino100":2.58,"oltre100":3.87},"E5":{"fino100":2.58,"oltre100":3.87},"E6":{"fino100":2.58,"oltre100":3.87}}},{"id":"calabria","nome":"Calabria","modello":"lineare","fonte":"Da verificare sul sito della Regione","stato":"da verificare","tariffe":{"E0":{"fino100":3.3,"oltre100":4.95},"E1":{"fino100":3.19,"oltre100":4.79},"E2":{"fino100":3.08,"oltre100":4.62},"E3":{"fino100":2.97,"oltre100":4.46},"E4":{"fino100":2.84,"oltre100":4.26},"E5":{"fino100":2.84,"oltre100":4.26},"E6":{"fino100":2.84,"oltre100":4.26}}},{"id":"campania","nome":"Campania","modello":"lineare","fonte":"ACI 2026","stato":"ufficiale","tariffe":{"E0":{"fino100":3.63,"oltre100":5.45},"E1":{"fino100":3.51,"oltre100":5.27},"E2":{"fino100":3.39,"oltre100":5.08},"E3":{"fino100":3.27,"oltre100":4.91},"E4":{"fino100":3.12,"oltre100":4.69},"E5":{"fino100":3.12,"oltre100":4.69},"E6":{"fino100":3.12,"oltre100":4.69}}},{"id":"emilia-romagna","nome":"Emilia-Romagna","modello":"lineare","fonte":"ACI 2026","stato":"ufficiale","tariffe":{"E0":{"fino100":3.3,"oltre100":4.9},"E1":{"fino100":3.19,"oltre100":4.78},"E2":{"fino100":3.07,"oltre100":4.62},"E3":{"fino100":2.97,"oltre100":4.45},"E4":{"fino100":2.84,"oltre100":4.26},"E5":{"fino100":2.84,"oltre100":4.26},"E6":{"fino100":2.84,"oltre100":4.26}}},{"id":"friuli-venezia-giulia","nome":"Friuli Venezia Giulia","modello":"lineare","fonte":"ACI 2026","stato":"ufficiale","tariffe":{"E0":{"fino100":3,"oltre100":4.5},"E1":{"fino100":2.9,"oltre100":4.35},"E2":{"fino100":2.8,"oltre100":4.2},"E3":{"fino100":2.7,"oltre100":4.05},"E4":{"fino100":2.58,"oltre100":3.87},"E5":{"fino100":2.58,"oltre100":3.87},"E6":{"fino100":2.58,"oltre100":3.87}}},{"id":"lazio","nome":"Lazio","modello":"lineare","fonte":"ACI 2026","stato":"ufficiale","tariffe":{"E0":{"fino100":3.3,"oltre100":4.95},"E1":{"fino100":3.19,"oltre100":4.79},"E2":{"fino100":3.08,"oltre100":4.62},"E3":{"fino100":2.97,"oltre100":4.46},"E4":{"fino100":2.84,"oltre100":4.26},"E5":{"fino100":2.84,"oltre100":4.26},"E6":{"fino100":2.84,"oltre100":4.26}}},{"id":"liguria","nome":"Liguria","modello":"lineare","fonte":"Da verificare sul sito della Regione","stato":"da verificare","tariffe":{"E0":{"fino100":3.3,"oltre100":4.95},"E1":{"fino100":3.19,"oltre100":4.79},"E2":{"fino100":3.08,"oltre100":4.62},"E3":{"fino100":2.97,"oltre100":4.46},"E4":{"fino100":2.84,"oltre100":4.26},"E5":{"fino100":2.84,"oltre100":4.26},"E6":{"fino100":2.84,"oltre100":4.26}}},{"id":"lombardia","nome":"Lombardia","modello":"lineare","fonte":"ACI 2026","stato":"ufficiale","tariffe":{"E0":{"fino100":3,"oltre100":4.5},"E1":{"fino100":2.9,"oltre100":4.35},"E2":{"fino100":2.8,"oltre100":4.2},"E3":{"fino100":2.7,"oltre100":4.05},"E4":{"fino100":2.58,"oltre100":3.87},"E5":{"fino100":2.58,"oltre100":3.87},"E6":{"fino100":2.58,"oltre100":3.87}}},{"id":"marche","nome":"Marche","modello":"lineare","fonte":"Da verificare sul sito della Regione","stato":"da verificare","tariffe":{"E0":{"fino100":3.24,"oltre100":4.86},"E1":{"fino100":3.13,"oltre100":4.7},"E2":{"fino100":3.02,"oltre100":4.54},"E3":{"fino100":2.92,"oltre100":4.37},"E4":{"fino100":2.79,"oltre100":4.18},"E5":{"fino100":2.79,"oltre100":4.18},"E6":{"fino100":2.79,"oltre100":4.18}}},{"id":"molise","nome":"Molise","modello":"lineare","fonte":"Quattroruote su tariffario regionale","stato":"ufficiale","tariffe":{"E0":{"fino100":3.53,"oltre100":5.3},"E1":{"fino100":3.38,"oltre100":5.07},"E2":{"fino100":3.24,"oltre100":4.85},"E3":{"fino100":3.09,"oltre100":4.63},"E4":{"fino100":2.76,"oltre100":4.14},"E5":{"fino100":2.76,"oltre100":4.14},"E6":{"fino100":2.76,"oltre100":4.14}}},{"id":"pa-bolzano","nome":"P.A. di Bolzano","modello":"lineare","fonte":"ACI 2026","stato":"ufficiale","tariffe":{"E0":{"fino100":2.7,"oltre100":4.05},"E1":{"fino100":2.61,"oltre100":3.92},"E2":{"fino100":2.52,"oltre100":3.78},"E3":{"fino100":2.43,"oltre100":3.65},"E4":{"fino100":2.32,"oltre100":3.48},"E5":{"fino100":2.09,"oltre100":3.13},"E6":{"fino100":1.96,"oltre100":2.94}}},{"id":"pa-trento","nome":"P.A. di Trento","modello":"lineare","fonte":"ACI 2026","stato":"ufficiale","tariffe":{"E0":{"fino100":3,"oltre100":4.5},"E1":{"fino100":2.9,"oltre100":4.35},"E2":{"fino100":2.8,"oltre100":4.2},"E3":{"fino100":2.7,"oltre100":4.05},"E4":{"fino100":2.58,"oltre100":3.87},"E5":{"fino100":2.06,"oltre100":3.1},"E6":{"fino100":1.96,"oltre100":2.95}}},{"id":"piemonte","nome":"Piemonte","modello":"fasce","fonte":"Quattroruote su tariffario Regione Piemonte 2026","stato":"ufficiale","tariffe":{"E0":{"fino53":3,"da54a100":3.18,"primi100_101_130":3.24,"oltre100_101_130":4.86,"primi100_oltre130":3.3,"oltre100_oltre130":4.95},"E1":{"fino53":2.9,"da54a100":3.07,"primi100_101_130":3.13,"oltre100_101_130":4.7,"primi100_oltre130":3.19,"oltre100_oltre130":4.79},"E2":{"fino53":2.8,"da54a100":2.97,"primi100_101_130":3.02,"oltre100_101_130":4.54,"primi100_oltre130":3.08,"oltre100_oltre130":4.62},"E3":{"fino53":2.7,"da54a100":2.86,"primi100_101_130":2.92,"oltre100_101_130":4.37,"primi100_oltre130":2.97,"oltre100_oltre130":4.46},"E4":{"fino53":2.58,"da54a100":2.73,"primi100_101_130":2.79,"oltre100_101_130":4.18,"primi100_oltre130":2.84,"oltre100_oltre130":4.26},"E5":{"fino53":2.58,"da54a100":2.73,"primi100_101_130":2.79,"oltre100_101_130":4.18,"primi100_oltre130":2.84,"oltre100_oltre130":4.26},"E6":{"fino53":2.58,"da54a100":2.73,"primi100_101_130":2.79,"oltre100_101_130":4.18,"primi100_oltre130":2.84,"oltre100_oltre130":4.26}}},{"id":"puglia","nome":"Puglia","modello":"lineare","fonte":"ACI 2026","stato":"ufficiale","tariffe":{"E0":{"fino100":3,"oltre100":4.5},"E1":{"fino100":2.9,"oltre100":4.35},"E2":{"fino100":2.8,"oltre100":4.2},"E3":{"fino100":2.7,"oltre100":4.05},"E4":{"fino100":2.58,"oltre100":3.87},"E5":{"fino100":2.58,"oltre100":3.87},"E6":{"fino100":2.58,"oltre100":3.87}}},{"id":"sardegna","nome":"Sardegna","modello":"lineare","fonte":"ACI 2026","stato":"ufficiale","tariffe":{"E0":{"fino100":3,"oltre100":4.5},"E1":{"fino100":2.9,"oltre100":4.35},"E2":{"fino100":2.8,"oltre100":4.2},"E3":{"fino100":2.7,"oltre100":4.05},"E4":{"fino100":2.58,"oltre100":3.87},"E5":{"fino100":2.58,"oltre100":3.87},"E6":{"fino100":2.58,"oltre100":3.87}}},{"id":"sicilia","nome":"Sicilia","modello":"lineare","fonte":"ACI 2026","stato":"ufficiale","tariffe":{"E0":{"fino100":3,"oltre100":4.5},"E1":{"fino100":2.9,"oltre100":4.35},"E2":{"fino100":2.8,"oltre100":4.2},"E3":{"fino100":2.7,"oltre100":4.05},"E4":{"fino100":2.58,"oltre100":3.87},"E5":{"fino100":2.58,"oltre100":3.87},"E6":{"fino100":2.58,"oltre100":3.87}}},{"id":"toscana","nome":"Toscana","modello":"lineare","fonte":"ACI 2026","stato":"ufficiale","tariffe":{"E0":{"fino100":3.47,"oltre100":5.45},"E1":{"fino100":3.35,"oltre100":5.37},"E2":{"fino100":3.23,"oltre100":5.08},"E3":{"fino100":3.12,"oltre100":4.91},"E4":{"fino100":2.71,"oltre100":4.26},"E5":{"fino100":2.71,"oltre100":4.26},"E6":{"fino100":2.71,"oltre100":4.26}}},{"id":"umbria","nome":"Umbria","modello":"lineare","fonte":"ACI 2026","stato":"ufficiale","tariffe":{"E0":{"fino100":3,"oltre100":4.5},"E1":{"fino100":2.9,"oltre100":4.35},"E2":{"fino100":2.8,"oltre100":4.2},"E3":{"fino100":2.7,"oltre100":4.05},"E4":{"fino100":2.58,"oltre100":3.87},"E5":{"fino100":2.58,"oltre100":3.87},"E6":{"fino100":2.58,"oltre100":3.87}}},{"id":"valle-d-aosta","nome":"Valle d'Aosta","modello":"lineare","fonte":"ACI 2026","stato":"ufficiale","tariffe":{"E0":{"fino100":3,"oltre100":4.5},"E1":{"fino100":2.9,"oltre100":4.35},"E2":{"fino100":2.8,"oltre100":4.2},"E3":{"fino100":2.7,"oltre100":4.05},"E4":{"fino100":2.58,"oltre100":3.87},"E5":{"fino100":2.58,"oltre100":3.87},"E6":{"fino100":2.58,"oltre100":3.87}}},{"id":"veneto","nome":"Veneto","modello":"lineare","fonte":"Da verificare sul sito della Regione","stato":"da verificare","tariffe":{"E0":{"fino100":3.3,"oltre100":4.95},"E1":{"fino100":3.19,"oltre100":4.79},"E2":{"fino100":3.08,"oltre100":4.62},"E3":{"fino100":2.97,"oltre100":4.46},"E4":{"fino100":2.84,"oltre100":4.26},"E5":{"fino100":2.84,"oltre100":4.26},"E6":{"fino100":2.84,"oltre100":4.26}}}]}</script>
@@ -767,7 +921,22 @@ input[aria-invalid="true"] {
     anno: $('anno'),
     annoErrore: $('anno-errore'),
     risultato: $('risultato'),
+    form: $('form'),
+    schede: $('schede'),
+    schedaDati: $('scheda-dati'),
+    schedaRisultato: $('scheda-risultato'),
+    punto: $('punto'),
+    riepilogo: $('riepilogo'),
   };
+
+  // Riscrive il contenuto solo se è cambiato: così un pulsante non sparisce tra pressione e
+  // rilascio del tocco (succedeva quando il campo perde il focus) e lo screen reader non
+  // rilegge lo stesso risultato.
+  function imposta(nodo, html) {
+    if (nodo.getAttribute('data-html') === html) return;
+    nodo.innerHTML = html;
+    nodo.setAttribute('data-html', html);
+  }
 
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
@@ -939,6 +1108,73 @@ input[aria-invalid="true"] {
     return h + '</article>';
   }
 
+  // ------------------------------------------------------------ schede (solo mobile)
+
+  var desktop = window.matchMedia('(min-width: 720px)');
+
+  function vai(vista, sposta) {
+    el.app.setAttribute('data-vista', vista);
+    var inDati = vista === 'dati';
+    el.schedaDati.setAttribute('aria-selected', String(inDati));
+    el.schedaRisultato.setAttribute('aria-selected', String(!inDati));
+    el.schedaDati.tabIndex = inDati ? 0 : -1;
+    el.schedaRisultato.tabIndex = inDati ? -1 : 0;
+    if (sposta) (inDati ? el.schedaDati : el.schedaRisultato).focus();
+    el.app.scrollTop = 0;
+  }
+
+  // Su desktop non ci sono schede: i due pannelli restano visibili e perdono i ruoli "tab".
+  function applicaModalita() {
+    var mobile = !desktop.matches;
+    el.schede.hidden = !mobile;
+    if (mobile) {
+      el.form.setAttribute('role', 'tabpanel');
+      el.form.setAttribute('aria-labelledby', 'scheda-dati');
+      el.risultato.setAttribute('role', 'tabpanel');
+      el.risultato.setAttribute('aria-labelledby', 'scheda-risultato');
+    } else {
+      ['role', 'aria-labelledby'].forEach(function (a) {
+        el.form.removeAttribute(a);
+        el.risultato.removeAttribute(a);
+      });
+      vai('dati', false);
+    }
+  }
+  if (desktop.addEventListener) desktop.addEventListener('change', applicaModalita);
+  else desktop.addListener(applicaModalita);
+
+  el.schedaDati.addEventListener('click', function () { vai('dati', false); });
+  el.schedaRisultato.addEventListener('click', function () { vai('risultato', false); });
+  el.schede.addEventListener('keydown', function (ev) {
+    var k = ev.key;
+    if (k === 'ArrowLeft' || k === 'Home') { ev.preventDefault(); vai('dati', true); }
+    if (k === 'ArrowRight' || k === 'End') { ev.preventDefault(); vai('risultato', true); }
+  });
+  el.riepilogo.addEventListener('click', function (ev) {
+    if (ev.target.closest && ev.target.closest('button')) vai('risultato', true);
+  });
+
+  function htmlRiepilogo(r) {
+    if (!r) return '<p class="riepilogo__testo">Compila i campi per vedere il risultato.</p>';
+    var b = r.bollo;
+    var h = '<p class="riepilogo__testo">';
+    if (b.calcolato) {
+      h += '<span class="riepilogo__etichetta">Bollo 2026' + (r.superbollo && r.superbollo.dovuto ? ' con superbollo' : '') + '</span>';
+      h += '<strong>' + esc(C.formatEuro(r.totaleCent)) + '</strong>';
+    } else {
+      h += '<span class="riepilogo__etichetta">Bollo 2026</span><strong>Verifica nella tua Regione</strong>';
+    }
+    h += '<span class="riepilogo__esito riepilogo__esito--' + (r.esenzione.esente ? 'si' : 'no') + '">' +
+      (r.esenzione.esente ? 'Esente dal 2027' : 'Non esente dal 2027') + '</span></p>';
+    h += '<button type="button" class="riepilogo__azione">Dettaglio</button>';
+    return h;
+  }
+
+  function mostraRisultato(r) {
+    imposta(el.riepilogo, htmlRiepilogo(r));
+    el.punto.className = 'punto' + (r ? (r.esenzione.esente ? ' punto--si' : ' punto--no') : '');
+  }
+
   // ------------------------------------------------------------ aggiornamento
 
   function mostraErrore(campo, errore, messaggio) {
@@ -961,12 +1197,14 @@ input[aria-invalid="true"] {
     if (!s.classe) mancano.push('la classe ambientale');
 
     if (s.kw.stato === 'errore') {
-      el.risultato.innerHTML = '<p class="vuoto">' + esc(s.kw.messaggio) + ' per vedere il risultato.</p>';
+      imposta(el.risultato, '<p class="vuoto">' + esc(s.kw.messaggio) + ' per vedere il risultato.</p>');
+      mostraRisultato(null);
       return;
     }
     if (mancano.length) {
       var elenco = mancano.length > 1 ? mancano.slice(0, -1).join(', ') + ' e ' + mancano[mancano.length - 1] : mancano[0];
-      el.risultato.innerHTML = '<p class="vuoto">Per vedere il risultato scegli ' + esc(elenco) + '.</p>';
+      imposta(el.risultato, '<p class="vuoto">Per vedere il risultato scegli ' + esc(elenco) + '.</p>');
+      mostraRisultato(null);
       return;
     }
 
@@ -980,7 +1218,8 @@ input[aria-invalid="true"] {
       annoImmatricolazione: s.anno.stato === 'ok' ? s.anno.valore : null,
     });
 
-    el.risultato.innerHTML = htmlBollo(r) + htmlEsenzione(r) + htmlValore(r);
+    imposta(el.risultato, htmlBollo(r) + htmlEsenzione(r) + htmlValore(r));
+    mostraRisultato(r);
   }
 
   el.regione.form.addEventListener('input', aggiorna);
@@ -1006,6 +1245,7 @@ input[aria-invalid="true"] {
   window.addEventListener('load', function () { inviaAltezza(true); });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { inviaAltezza(); });
 
+  applicaModalita();
   aggiorna();
   inviaAltezza(true);
 })();

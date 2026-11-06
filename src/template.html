@@ -13,7 +13,12 @@
 </style>
 </head>
 <body>
-<div id="app" class="app">
+<div id="app" class="app" data-vista="dati">
+  <div id="schede" class="schede" role="tablist" aria-label="Sezioni del calcolatore">
+    <button type="button" role="tab" id="scheda-dati" class="scheda" aria-controls="form" aria-selected="true">La tua auto</button>
+    <button type="button" role="tab" id="scheda-risultato" class="scheda" aria-controls="risultato" aria-selected="false" tabindex="-1">Risultato <span id="punto" class="punto" aria-hidden="true"></span></button>
+  </div>
+
   <div class="layout">
     <form id="form" class="form" novalidate autocomplete="off">
       <h2 class="titolo">La tua auto</h2>
@@ -62,14 +67,16 @@
       <div class="campo">
         <label class="scelta scelta--casella" for="unica"><input id="unica" name="unica" type="checkbox" checked> <span>È l'unica auto fino a 80 kW intestata a me (o la meno potente tra quelle che ho)</span></label>
       </div>
+
+      <div id="riepilogo" class="riepilogo" aria-live="polite" aria-atomic="true"></div>
     </form>
 
-    <section id="risultato" aria-live="polite" aria-atomic="false" aria-label="Risultato"></section>
-  </div>
+    <section id="risultato" class="risultato" aria-live="polite" aria-atomic="false" aria-label="Risultato"></section>
 
-  <footer class="nota">
-    <p>Calcolo indicativo per autovetture a uso privato con pagamento annuale. Le tariffe sono quelle 2026 pubblicate da ACI e dalle Regioni; per Calabria, Liguria, Marche e Veneto vanno verificate sul sito della Regione. Non sono considerate le esenzioni e riduzioni regionali per GPL, metano, ibride, auto storiche e disabili. L'esenzione 2027 è quella prevista dall'articolo 3 del disegno di legge di bilancio 2027 e può cambiare durante l'esame parlamentare. Fonti: ACI, tariffari regionali 2026; A.C. 3174, legge di bilancio 2027.</p>
-  </footer>
+    <footer class="nota">
+      <p>Calcolo indicativo per autovetture a uso privato con pagamento annuale. Le tariffe sono quelle 2026 pubblicate da ACI e dalle Regioni; per Calabria, Liguria, Marche e Veneto vanno verificate sul sito della Regione. Non sono considerate le esenzioni e riduzioni regionali per GPL, metano, ibride, auto storiche e disabili. L'esenzione 2027 è quella prevista dall'articolo 3 del disegno di legge di bilancio 2027 e può cambiare durante l'esame parlamentare. Fonti: ACI, tariffari regionali 2026; A.C. 3174, legge di bilancio 2027.</p>
+    </footer>
+  </div>
 </div>
 
 <script type="application/json" id="dati">__DATI__</script>
